@@ -97,18 +97,18 @@ const useStyles = makeStyles((theme) => ({
 export default function HomePage() {
     const [searchValue, setSearchValue] = useState('');
     const styles = useStyles();
-    const [quoteNumber, setQuoteNumber] = useState(1);
+    const [quoteNumber, setQuoteNumber] = useState(0);
     const [currentQuote, setCurrentQuote] = useState({
       text : '" Genius is one percent inspiration and ninety-nine percent perspiration. "', 
-      author : ' Thomas Edition '
-    });
+      author : 'Thomas Edition'
+  });
 
       useEffect(() => {
           setTimeout(() => {
             fetchQuote(quoteNumber).then((quote) => {
               setCurrentQuote(quote);
+              setQuoteNumber(quoteNumber >= 14 ? 0 : quoteNumber + 1);
             });
-          setQuoteNumber(quoteNumber >= 14 ? 0 : quoteNumber + 1);
           }, 15000);
       }, [quoteNumber]);
     return(
