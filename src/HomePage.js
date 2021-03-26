@@ -7,6 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import ParticlesBg from 'particles-bg';
 import Divider from '@material-ui/core/Divider';
 
+
 const useStyles = makeStyles((theme) => ({
     root : {
         flex : 1,
@@ -93,14 +94,14 @@ const useStyles = makeStyles((theme) => ({
       }, 
 }));
 
-
 export default function HomePage() {
-    
     const [searchValue, setSearchValue] = useState('');
     const styles = useStyles();
-    const [quoteNumber, setQuoteNumber] = useState(0);
-    const [currentQuote, setCurrentQuote] = useState({quote : '“Experience is the name everyone gives to their mistakes.”',
-    author : 'Oscar Wilde'});
+    const [quoteNumber, setQuoteNumber] = useState(1);
+    const [currentQuote, setCurrentQuote] = useState({
+      text : '" Genius is one percent inspiration and ninety-nine percent perspiration. "', 
+      author : ' Thomas Edition '
+    });
 
       useEffect(() => {
           setTimeout(() => {
@@ -110,7 +111,6 @@ export default function HomePage() {
           setQuoteNumber(quoteNumber >= 14 ? 0 : quoteNumber + 1);
           }, 15000);
       }, [quoteNumber]);
-
     return(
         <Fragment>
         <div className={styles.root}>
@@ -139,7 +139,7 @@ export default function HomePage() {
             <div className={styles.quoteClass} >
             <Grid container spacing={3}>  
                 <Grid item xs={8} >
-                    <p className={styles.quote} >{currentQuote.quote}</p>
+                    <p className={styles.quote} >{currentQuote.text}</p>
                     <p className={styles.quote} >- {currentQuote.author}</p>
                 </Grid>
             </Grid>
