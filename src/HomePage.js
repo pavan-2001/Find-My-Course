@@ -104,6 +104,8 @@ export default function HomePage() {
   });
 
       useEffect(() => {
+        
+        
           setTimeout(() => {
             fetchQuote(quoteNumber).then((quote) => {
               setCurrentQuote(quote);

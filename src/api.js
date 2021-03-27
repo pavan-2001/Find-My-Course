@@ -50,5 +50,18 @@ const quoteArray = [{
 export function fetchQuote(quoteNumber) {
     return new Promise((resolve) => {
             resolve(quoteArray[quoteNumber]);
+    });
+}
+
+
+
+export function fetchBooks(bookName) {
+    
+    const books = fetch('https://www.googleapis.com/books/v1/volumes?q='+bookName).then((response) => response.json()).then((json) => {
+    return json.items;
+    });
+    return new Promise((resolve) => {
+        resolve(books);
     })
 }
+
