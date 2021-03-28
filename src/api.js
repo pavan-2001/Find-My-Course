@@ -57,11 +57,25 @@ export function fetchQuote(quoteNumber) {
 
 export function fetchBooks(bookName) {
     
-    const books = fetch('https://www.googleapis.com/books/v1/volumes?q='+bookName).then((response) => response.json()).then((json) => {
+    const books = fetch('https://www.googleapis.com/books/v1/volumes?q='+bookName,).then((response) => response.json()).then((json) => {
     return json.items;
     });
     return new Promise((resolve) => {
         resolve(books);
-    })
+    });
 }
-
+var videosID = [];
+export function fetchPlaylist(topicName) {
+    const apiKey = 'AIzaSyBLg73wDQ2n0g-Dkp0nLHeFsk90VM0vZ7o';
+    const maxResults = 50;
+    const playlist = fetch('https://www.googleapis.com/youtube/v3/search?key='+apiKey+'&type=video&part=snippet&maxResults='+maxResults+'&q='+topicName).then((response) => response.json()).then((json) => {
+        // var x;
+        // for(x in json) {
+        //     console.log(json[x]);
+        // }
+    return json.items;
+    });
+    return new Promise((resolve) => {
+        resolve(playlist);
+    });
+}

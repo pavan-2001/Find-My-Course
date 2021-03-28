@@ -12,7 +12,12 @@ import SearchButton from '@material-ui/icons/Search';
 import Box from '@material-ui/core/Box';
 import YouTubeIcon from '@material-ui/icons/YouTube';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
-import {fetchBooks} from './api';
+import {fetchBooks, fetchPlaylist, fetchRatings} from './api';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import ButtonBase from '@material-ui/core/ButtonBase';
+import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay';
+import Link from '@material-ui/core/Link';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -119,9 +124,43 @@ const useStyles = makeStyles((theme) => ({
         position : 'absolute',
         width : `calc(1em + ${theme.spacing(5000)}px)`,
     },
-    tabContent : {
-
-    }
+    tabPlaylist : {
+      marginLeft : `calc(1em + ${theme.spacing(80)}px)`,
+      position : 'absolute',
+      width : `calc(1em + ${theme.spacing(5000)}px)`,
+   },
+    rootBook: {
+        flexGrow: 1,
+        marginTop : `calc(1em + ${theme.spacing(5)}px)`,
+      },
+      paperBook: {
+        padding: theme.spacing(2),
+        margin: 'auto',
+        maxWidth: 800,
+        backgroundColor : 'white'
+      },
+      imageBook: {
+        width: 200,
+        height: 200,
+        '&:hoverZoom imgHover' : {
+          transition: 'all 0.3s ease 0s',
+          width: '200%',
+        }
+      },
+      imageVideo: {
+        width: 300,
+        height: 200,
+        '&:hoverZoom imgHover' : {
+          transition: 'all 0.3s ease 0s',
+          width: '200%',
+        }
+      },
+      imgBook: {
+        margin: 'auto',
+        display: 'block',
+        width : '100%',
+        height : '100%'
+      },
 }));
 
 export default function ContentPage() {
@@ -129,19 +168,91 @@ export default function ContentPage() {
     const [value, setValue] = useState(0);
     const [search, setSearch] = useState('');
     const [books, setBooks] = useState([]);
+    const [videos, setVideos] = useState([]);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
 
     const fetchItems = () => {
+        setBooks([]);
         fetchBooks(search).then((result) => setBooks(result));
+        setVideos([]);
+        fetchPlaylist(search).then((result) => setVideos(result)); 
     };
-    const listItems = books.map((d) => (
-        <li key={d.volumeInfo.title}>
-            {d.volumeInfo.title}
-        </li>
+
+    const booksList = books.map((d) => (
+        <div className={styles.rootBook}>
+      <Paper className={styles.paperBook}>
+        <Grid container spacing={2}>
+          <Grid item>
+          <Link href={d.volumeInfo.previewLink} >
+            <ButtonBase className={styles.imageBook}>
+              <img className={styles.imgBook} alt="complex" src={d.volumeInfo.imageLinks['thumbnail']} />
+            </ButtonBase>
+            </Link>
+          </Grid>
+          <Grid item xs={12} sm container>
+            <Grid item xs container direction="column" spacing={2}>
+              <Grid item xs>
+                <Typography gutterBottom variant="h5">
+                  {d.volumeInfo.title}
+                </Typography>
+                <Typography variant="body2" gutterBottom>
+                    Authors : {d.volumeInfo.authors}
+                </Typography>
+                <Typography variant="body2" gutterBottom>
+                  Publishers : {d.volumeInfo.publisher}
+                </Typography>
+                <Typography variant="body2" gutterBottom>
+                  Subtitle : {d.volumeInfo.subtitle}
+                </Typography>
+                <Typography variant="body2" gutterBottom>
+                  Published Date : {d.volumeInfo.publishedDate}
+                </Typography>
+                <Typography variant="body2" gutterBottom>
+                  Page Count : {d.volumeInfo.pageCount}
+                </Typography>
+                <Typography variant="body2" gutterBottom>
+                  Average Rating : {d.volumeInfo.averageRating}
+                </Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Paper>
+    </div>
     ));
+    const videosList = videos.map((d) => (
+      <div className={styles.rootBook}>
+    <Paper className={styles.paperBook}>
+      <Grid container spacing={2}>
+        <Grid item>
+          <Link href={`https://www.youtube.com/watch?v=${d.id.videoId}`}>
+          <ButtonBase className={styles.imageVideo}>
+            <img className={styles.imgBook} alt="complex" src={d.snippet.thumbnails.high.url} />
+          </ButtonBase>
+          </Link>
+        </Grid>
+        <Grid item xs={12} sm container>
+          <Grid item xs container direction="column" spacing={2}>
+            <Grid item xs>
+              <Typography gutterBottom variant="h5">
+                {d.snippet.title}
+              </Typography>
+              <Typography variant="body2" gutterBottom>
+              {d.snippet.channelTitle}
+              </Typography>
+              <Typography variant="body2">
+                {d.snippet.description}
+              </Typography>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+    </Paper>
+  </div>
+  ));
 
     return (
         <div className={styles.parent}>
@@ -149,7 +260,7 @@ export default function ContentPage() {
             <AppBar className={styles.appBar}>
                 <Toolbar>
                     <Typography className={styles.title} variant='h5' nopWrap>
-                        Find My Course
+                        <strong>Find My Course</strong>
                     </Typography>
                     <div className={styles.search} >
                         <InputBase
@@ -186,13 +297,12 @@ export default function ContentPage() {
         </Tabs>
       </AppBar>
       <TabPanel className={styles.tabContent} value={value} index={0}>
-        Item One
+        {videosList}
       </TabPanel>
       <TabPanel className={styles.tabContent} value={value} index={1}>
-        {listItems}
+        {booksList}
       </TabPanel>
     </div>
     </div>
-            
     );
 }

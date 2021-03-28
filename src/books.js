@@ -1,23 +1,23 @@
 import { ContactlessOutlined } from '@material-ui/icons';
 import React, {useState, useEffect, Fragment} from 'react';
-import {fetchBooks} from './api';
+import {fetchPlaylist} from './api';
 
 export default function Books() {
     const [books, setBooks] = useState([]);
         const getBooks = () => {
-            fetchBooks('python').then((result) => setBooks(result));
+            fetchPlaylist('python').then((result) => setBooks(result));
         };
-        const listItems = books.map((d) => (
-            <li key={d.volumeInfo.title}>
-                {d.volumeInfo.title}
-            </li>
-        ));
+        // const listItems = books.map((d) => (
+        //     <li key={d.volumeInfo.title}>
+        //         {d.volumeInfo.title}
+        //     </li>
+        // ));
         
         return (
             <Fragment>
             <button onClick={getBooks}>Click</button>
             <div>
-                {listItems}
+                {/* {listItems} */}
             </div>
             </Fragment>
         );
